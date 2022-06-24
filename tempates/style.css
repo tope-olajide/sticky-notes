@@ -149,7 +149,7 @@ body {
   justify-content: space-evenly;
   }
   
-  .no-notes-container{
+  .no-notes-container, .delete-note-modal{
     display: flex;
     flex-direction: column;
     width: 350px;
@@ -162,6 +162,14 @@ body {
   }
   .no-notes-container {
     background-color: #ceb1ff; ;
+  }
+  .delete-note-modal{
+    position: absolute;
+    left: 0; 
+    right: 0; 
+    margin-left: auto; 
+    margin-right: auto; 
+    margin-top: 5rem;
   }
   .auth-container{
   width: 350px;
