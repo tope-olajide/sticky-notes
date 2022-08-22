@@ -1,6 +1,7 @@
 import NoteCard from "./NoteCard"
 import { useState } from 'react';
-
+import MainNavigationBar from '../MainNavigationBar';
+import Footer from "./Footer";
 enum Theme {
     Yellow = "yellow",
     Green = "green",
@@ -14,13 +15,13 @@ enum Theme {
 interface INote {
     content: string;
     color: Theme;
-    noteId: string;
+    id: string;
     isMaximized: boolean
 }
 const defaultNoteData = {
     content: "",
     color: Theme.Yellow,
-    noteId: `${Date.now()}`,
+    id: `${Date.now()}`,
     isMaximized: false
 }
 
@@ -32,7 +33,7 @@ const NoteContainer = () => {
         setNotes([...notes,  {
             content: "",
             color: Theme.Yellow,
-            noteId: `${Date.now()}`,
+            id: `${Date.now()}`,
             isMaximized: false
         } ]);
         console.log(notes)
@@ -40,7 +41,7 @@ const NoteContainer = () => {
 
     const changeColor = (noteId: string, color: Theme) => {
         const updatedNotes = notes.map((note:INote) => {
-          if (note.noteId === noteId) {
+          if (note.id === noteId) {
             return {
               ...note, color: color
             }
@@ -52,7 +53,7 @@ const NoteContainer = () => {
       
 const toggleFullscreen = (noteId:string) => {
     const updatedNotes = notes.map((note:INote) => {
-        if (note.noteId === noteId) {
+        if (note.id === noteId) {
             if (note.isMaximized === false) {
                return {...note, isMaximized: true}
               }
@@ -64,42 +65,47 @@ const toggleFullscreen = (noteId:string) => {
       })
       setNotes(updatedNotes)
 }
-const deleteNote = (id: string) => {
+const deleteNote = (noteId: string) => {
     const filteredNotes = notes.filter((note:INote) => {
-        return note.noteId !== id;
+        return note.id !== noteId;
       })
       setNotes(filteredNotes)
   }
 
-if(!notes.length) {
-    return(
-        <>
-        <section className="no-notes-container">
-        <h3>You have no notes</h3><button onClick={createNote}> Create New </button>
-        </section>
-        </>
-    )
-            
-          }
-    return (
-        
-        <section className="notes-container">
-            {notes.map((note: INote) => {
-                return (
-                    <NoteCard 
-                    createNote = {createNote}
-                    key = {note.noteId}
-                    changeColor = {changeColor}
-                    noteId = {note.noteId}
-                    color = {note.color}
-                    toggleFullscreen = {toggleFullscreen}
-                    isMaximized ={note.isMaximized}
-                    deleteNote ={deleteNote}
-                    />
-                )
-            })}
-        </section>
-         
-    )
+  return (<>
+    <section className='main-container'>
+      <MainNavigationBar />
+      <section className="notes-container">
+        {notes.length ? notes.map((note: INote) => {
+          return (
+            <NoteCard
+              createNote={createNote}
+              key={note.id}
+              changeColor={changeColor}
+              id={note.id}
+              color={note.color}
+              toggleFullscreen={toggleFullscreen}
+              isMaximized={note.isMaximized}
+              deleteNote={deleteNote}
+/*               saveNoteManuallyProps={saveNoteManually}
+              contents={note.content} */
+/*               isSaved={note.isSaved}
+              isSaving={note.isSaving}
+              isError={note.isError} */
+
+            />
+          )
+        })
+          : <>
+            <section className="no-notes-container">
+              <h3>You have no notes</h3><button onClick={createNote}> Create New </button>
+            </section>
+          </>
+        }
+      </section>
+      <Footer />
+    </section>
+  </>
+  )
 }
 export default NoteContainer
