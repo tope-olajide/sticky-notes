@@ -1,14 +1,19 @@
-import { useState } from 'react'
+import { useState, ChangeEvent, FormEvent } from 'react'
 import AuthNavigationBar from './AuthNavigationBar'
 import Footer from './Footer'
 
 const SignIn = () => {
   const [userInputs, setUserInputs] = useState({})
 
-  const saveUserInputs = (e: any) => {
-    setUserInputs({ ...userInputs, [e.target.name]: e.target.value })
-    console.log(userInputs)
+  const saveUserInputs = (event: ChangeEvent<HTMLInputElement>) => {
+    setUserInputs({ ...userInputs, [event.target.name]: event.target.value })
+    console.log(userInputs);
   }
+
+  const handleFormSubmit = async (event: FormEvent) => {
+    event.preventDefault()
+    console.log(userInputs)
+  };
 
   return (
     <>
@@ -17,9 +22,9 @@ const SignIn = () => {
       <div className="auth-container">
         <form className="auth-form">
           <h3>Sign In</h3>
-          <input type='text' name="usernameOrEmail" placeholder="Username or Email" onChange={(e) => saveUserInputs(e)} />
+          <input type='text' name="usernameOrEmail" placeholder="Username or Email" onChange={(event) => saveUserInputs(event)} />
           <input type='password' name="password" placeholder="Password" onChange={(e) => saveUserInputs(e)} />
-          <button>Login</button>
+          <button onClick={handleFormSubmit}>Login</button>
         </form>
       </div>
       <Footer />
