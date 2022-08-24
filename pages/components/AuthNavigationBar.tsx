@@ -6,8 +6,8 @@ const AuthNavigationbar = () => {
         <div className="auth-navbar">
         <h1>Sticky Note</h1>
         <div className="menu">
-{/*         <Link href="/sign-up"> <h5>Sign Up</h5> </Link> */}
-         <Link href="/sign-in"> <h5>Log In</h5> </Link> 
+        <h5><Link href="/sign-up"> Sign Up </Link></h5>
+        <h5><Link href="/sign-in"> Log In </Link></h5>
         </div>
         </div>
         </>
