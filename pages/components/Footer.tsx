@@ -5,9 +5,9 @@ import { faHeart } from '@fortawesome/free-solid-svg-icons'
 const Footer = () => {
     return (
         <>
-       <footer>
-<p>Developed with <FontAwesomeIcon icon={faHeart} size={"xs"} /> by Temitope.js</p>
-        </footer>
+            <footer>
+                <p>Made with <FontAwesomeIcon icon={faHeart} size={"xs"} /> by Temitope.js</p>
+            </footer>
         </>
     )
 }
