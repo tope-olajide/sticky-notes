@@ -6,7 +6,7 @@ const MainNavigationBar = () => {
             <div className="auth-navbar">
                 <h1>Sticky Note</h1>
                 <div className="menu">
-                <Link href="components/sign-in"><button className="logout-button">Logout</button></Link>
+                <Link href="/sign-in"><button className="logout-button">Logout</button></Link>
                 </div>
             </div>
         </>
