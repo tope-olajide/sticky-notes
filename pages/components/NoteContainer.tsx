@@ -1,6 +1,6 @@
 import NoteCard from "./NoteCard"
 import { useState } from 'react';
-import MainNavigationBar from '../MainNavigationBar';
+import MainNavigationBar from './MainNavigationBar';
 import Footer from "./Footer";
 enum Theme {
     Yellow = "yellow",
