@@ -27,7 +27,7 @@ const defaultNoteData = {
 
 
 const NoteContainer = () => {
-    const [notes, setNotes] = useState<Array<INote>>([defaultNoteData]);
+    const [notes, setNotes] = useState<Array<INote>>([]);
     
     const createNote = () => {
         setNotes([...notes,  {
@@ -87,18 +87,12 @@ const deleteNote = (noteId: string) => {
               toggleFullscreen={toggleFullscreen}
               isMaximized={note.isMaximized}
               deleteNote={deleteNote}
-/*               saveNoteManuallyProps={saveNoteManually}
-              contents={note.content} */
-/*               isSaved={note.isSaved}
-              isSaving={note.isSaving}
-              isError={note.isError} */
-
             />
           )
         })
           : <>
             <section className="no-notes-container">
-              <h3>You have no notes</h3><button onClick={createNote}> Create New </button>
+              <h3>You have no sticky notes.</h3><button onClick={createNote}> Create New </button>
             </section>
           </>
         }
