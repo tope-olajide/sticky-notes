@@ -1,4 +1,4 @@
-import NoteContainer from "./components/NoteContainer"
+import NoteContainer from "../components/NoteContainer"
 
 function HomePage() {
   return <><NoteContainer /></>
