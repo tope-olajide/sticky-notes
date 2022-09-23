@@ -1,9 +1,13 @@
-import NoteContainer from "../components/NoteContainer"
+
+import IsLoggedIn from "../components/IsLoggedIn"
 
 function HomePage() {
+  return (
+    <>
+      <IsLoggedIn />
+    </>
+  )
 
-  return <><NoteContainer /></>
-  
 }
 
 export default HomePage

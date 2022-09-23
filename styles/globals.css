@@ -195,7 +195,10 @@ outline: none;
   padding-left: 1rem;
   color: white;
 }
+.auth-navbar h5{
+  margin: 0;
 
+}
 .auth-navbar .menu {
   display: flex;
 }
