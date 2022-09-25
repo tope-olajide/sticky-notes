@@ -6,7 +6,6 @@ import { ToastContainer, toast } from "react-toastify";
 import { SIGNUP_MUTATION } from '../mutations/users';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
-import { isLoggedInVar } from '../cache'; 
 import { useRouter } from 'next/router'
 const SignUp = () => {
 const [signup, { loading, data, error }] = useMutation(SIGNUP_MUTATION);
@@ -16,7 +15,7 @@ const router = useRouter();
      if (data) {
       console.log(data);
        setTimeout(() => router.push('/'), 3000);
-      isLoggedInVar(true);
+       localStorage.setItem("isLoggedIn", 'true');
       toast.success("Registration Successful!", {
         position: "bottom-center"
       });

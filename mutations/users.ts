@@ -24,3 +24,11 @@ export const IS_LOGGED_IN = gql`
     isLoggedIn @client
   }
 `;
+
+export const LOGIN_MUTATION = gql`
+  mutation signin($usernameOrEmail: String!, $password: String!) {
+    signinUser(data: { usernameOrEmail: $usernameOrEmail, password: $password }) {
+      token
+    }
+  }
+`;
