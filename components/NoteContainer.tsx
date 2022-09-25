@@ -2,6 +2,8 @@ import NoteCard from "./NoteCard"
 import { useState } from 'react';
 import MainNavigationBar from './MainNavigationBar';
 import Footer from "./Footer";
+import { FETCH_ALL_NOTES } from "../queries/note";
+import { useQuery } from "@apollo/client";
 enum Theme {
     Yellow = "yellow",
     Green = "green",
@@ -28,7 +30,8 @@ const defaultNoteData = {
 
 const NoteContainer = () => {
     const [notes, setNotes] = useState<Array<INote>>([]);
-    
+    const { loading, error, data } = useQuery(FETCH_ALL_NOTES);
+
     const createNote = () => {
         setNotes([...notes,  {
             content: "",
@@ -71,12 +74,27 @@ const deleteNote = (noteId: string) => {
       })
       setNotes(filteredNotes)
   }
+  if (loading) {
+    return (
+      <>
+        <h1>Loading...</h1>
+      </>
+    )
+  }
+  if (error) {
+    return (
+      <>
+        <h1>Error</h1>
+      </>
+    )
+  }
 
   return (<>
+  {console.log(data.allNotes)}
     <section className='main-container'>
       <MainNavigationBar />
       <section className="notes-container">
-        {notes.length ? notes.map((note: INote) => {
+        {data.allNotes.length ? data.allNotes.map((note: INote) => {
           return (
             <NoteCard
               createNote={createNote}
@@ -87,12 +105,13 @@ const deleteNote = (noteId: string) => {
               toggleFullscreen={toggleFullscreen}
               isMaximized={note.isMaximized}
               deleteNote={deleteNote}
+              contents={note.content}
             />
           )
         })
           : <>
             <section className="no-notes-container">
-              <h3>You have no sticky notes.</h3><button onClick={createNote}> Create New </button>
+              <h3>You have no notes</h3><button onClick={createNote}> Create New </button>
             </section>
           </>
         }
