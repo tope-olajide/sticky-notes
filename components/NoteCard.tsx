@@ -1,6 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlus, faWindowMaximize, faTrash, faSave } from '@fortawesome/free-solid-svg-icons'
-
 enum Theme {
     Yellow = "yellow",
     Green = "green",
@@ -19,6 +18,7 @@ interface IProps {
     toggleFullscreen(noteId: string): void;
     isMaximized: boolean;
     deleteNote(noteId: string): void;
+    contents:string;
 }
 const NoteCard: React.FC<IProps> = (props) => {
 
@@ -38,7 +38,7 @@ const NoteCard: React.FC<IProps> = (props) => {
                 </div>
                 <div className="card-body">
                     <div className="text-container">
-                        <textarea className="text-area"></textarea>
+                        <textarea defaultValue={props.contents} className="text-area"></textarea>
                     </div>
                 </div>
                 <div className="card-footer">
