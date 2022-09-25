@@ -297,6 +297,12 @@ padding: .4rem;
       .auth-navbar .menu h5{
         font-size: .7rem;
       }
+      .no-notes-container{
+        width: 80%;
+      }
+      .no-notes-container button {
+        width: 80%;
+       }
 }
 
 @media screen and (max-width: 280px) {
