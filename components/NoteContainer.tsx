@@ -32,17 +32,27 @@ const NoteContainer = () => {
 
     const [saveNote,] = useMutation(SAVE_NOTE);
     const [modifyNote,] = useMutation(MODIFY_NOTE);
-    const createNote = () => {
-        setNotes([...notes,  {
-            content: "",
-            color: Theme.Yellow,
-            id: `${Date.now()}`,
-            isMaximized: false,
-            isSaved: false,
-            isSaving:false,
-            isError:true
-        } ]);
-        console.log(notes)
+    const createNote = (currentNoteId: string) => {
+      const noteData = client.readQuery({ query: FETCH_ALL_NOTES });
+      const noteCopy = [...noteData.allNotes];
+      const currentNoteIndex: number = noteCopy.findIndex((note:INote) => note.id === currentNoteId) || 0;
+      const emptyNote =  {
+        content: "",
+        color: Theme.Yellow,
+        id: `${Date.now()}`,
+        isMaximized: false,
+        isSaved: false,
+        isSaving:false,
+        isError:true
+    }
+    noteCopy.splice(currentNoteIndex + 1, 0, emptyNote)
+    client.writeQuery({
+      query:FETCH_ALL_NOTES,
+      data: {
+        allNotes: [...noteCopy],
+      },
+    });
+    console.log(noteCopy)
     }
 
     const changeColor = (noteId: string, color: Theme) => {
@@ -222,7 +232,7 @@ const deleteNote = (noteId: string) => {
         })
           : <>
             <section className="no-notes-container">
-              <h3>You have no notes</h3><button onClick={createNote}> Create New </button>
+              <h3>You have no notes</h3><button onClick={()=>createNote}> Create New </button>
             </section>
           </>
         }
