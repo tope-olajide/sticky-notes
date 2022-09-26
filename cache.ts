@@ -1,21 +1,35 @@
-import { gql, InMemoryCache, makeVar } from '@apollo/client';
-const typeDefs = gql`
-  extend type Query {
-    isLoggedIn: Boolean!
-  }
-`
-export const isLoggedInVar = makeVar<boolean>(false);
+import { InMemoryCache } from '@apollo/client';
 
 export const cache: InMemoryCache = new InMemoryCache({
     typePolicies: {
-        Query: {
-            fields: {
-                isLoggedIn: {
-                    read() {
-                      return isLoggedInVar();
-                    }
-                  },
-            }
-        }
-    }
+        /* Note: {
+         fields: {
+           content: {
+             read(content) {
+               return content.toUpperCase();
+             }
+           }
+         }
+       }, */ 
+       Note: {
+         fields: {
+           isMaximized:{
+             read(isMaximized = false) {
+               return isMaximized ;
+             },
+             
+           },
+           isSaving:{
+             read(isSaving = false) {
+               return isSaving ;
+             }
+           },
+            isError:{
+             read(isError = false) {
+               return isError ;
+             }
+           } 
+         }
+       }
+     }
 })

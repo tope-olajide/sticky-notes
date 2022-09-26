@@ -1,5 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPlus, faWindowMaximize, faTrash, faSave } from '@fortawesome/free-solid-svg-icons'
+import { faPlus, faWindowMaximize, faTrash, faSave, faExclamationTriangle, faSpinner, faCheck } from '@fortawesome/free-solid-svg-icons'
+import { ChangeEvent, useState } from 'react';
 enum Theme {
     Yellow = "yellow",
     Green = "green",
@@ -18,16 +19,30 @@ interface IProps {
     toggleFullscreen(noteId: string): void;
     isMaximized: boolean;
     deleteNote(noteId: string): void;
-    contents:string;
+    contents: string;
+    saveUserNote(id: string, color: Theme, contents: string, isSaved: boolean): Promise<void>;
+    isSaved: boolean;
+    isSaving: boolean;
+    isError: boolean;
 }
-const NoteCard: React.FC<IProps> = (props) => {
 
+const NoteCard: React.FC<IProps> = (props) => {
+    const [timer, setTimer] = useState<NodeJS.Timeout>()
+    const handleContentChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
+        clearTimeout(timer)
+        const newTimer: NodeJS.Timeout = setTimeout(() => {
+            props.saveUserNote(props.id, props.color, event.target.value, props.isSaved)
+        }, 2000)
+        setTimer(newTimer)
+    }
     return (
         <>
             <div className={props.isMaximized ? "card-maximized" : "card"} id={props.color}>
                 <div className="card-header">
                     <div className="icon-container">
-                        <div className="left-icon"><div className="icon" onClick={() => props.createNote()}><FontAwesomeIcon icon={faPlus} /></div>
+                        <div className="left-icon">
+                            <div className="icon" onClick={() => props.createNote()}><FontAwesomeIcon icon={faPlus} /></div>
+                            <div className="icon" >{props.isSaving ? <FontAwesomeIcon icon={faSpinner} spin />:props.isError ? <FontAwesomeIcon icon={faExclamationTriangle} />:props.isSaved ? <FontAwesomeIcon icon={faCheck} /> : null}</div>
                         </div>
                         <div className="right-icon">
                             <div className="icon"><FontAwesomeIcon icon={faSave} /></div>
@@ -38,7 +53,7 @@ const NoteCard: React.FC<IProps> = (props) => {
                 </div>
                 <div className="card-body">
                     <div className="text-container">
-                        <textarea defaultValue={props.contents} className="text-area"></textarea>
+                        <textarea defaultValue={props.contents} onChange={(e) => handleContentChange(e)} className="text-area"></textarea>
                     </div>
                 </div>
                 <div className="card-footer">

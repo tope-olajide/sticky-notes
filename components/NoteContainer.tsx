@@ -3,7 +3,9 @@ import { useState } from 'react';
 import MainNavigationBar from './MainNavigationBar';
 import Footer from "./Footer";
 import { FETCH_ALL_NOTES } from "../queries/note";
-import { useQuery } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
+import client from "../client";
+import { MODIFY_NOTE, SAVE_NOTE } from "../mutations/note";
 enum Theme {
     Yellow = "yellow",
     Green = "green",
@@ -18,26 +20,27 @@ interface INote {
     content: string;
     color: Theme;
     id: string;
-    isMaximized: boolean
+    isMaximized: boolean;
+    isSaved:boolean;
+    isSaving:boolean;
+    isError:boolean;
 }
-const defaultNoteData = {
-    content: "",
-    color: Theme.Yellow,
-    id: `${Date.now()}`,
-    isMaximized: false
-}
-
 
 const NoteContainer = () => {
     const [notes, setNotes] = useState<Array<INote>>([]);
     const { loading, error, data } = useQuery(FETCH_ALL_NOTES);
 
+    const [saveNote,] = useMutation(SAVE_NOTE);
+    const [modifyNote,] = useMutation(MODIFY_NOTE);
     const createNote = () => {
         setNotes([...notes,  {
             content: "",
             color: Theme.Yellow,
             id: `${Date.now()}`,
-            isMaximized: false
+            isMaximized: false,
+            isSaved: false,
+            isSaving:false,
+            isError:true
         } ]);
         console.log(notes)
     }
@@ -68,12 +71,116 @@ const toggleFullscreen = (noteId:string) => {
       })
       setNotes(updatedNotes)
 }
+
+const showSavingNoteIcon = (id: string) => {
+  const noteData = client.readQuery({ query: FETCH_ALL_NOTES });
+  const newNote = noteData.allNotes.map((note: INote) => {
+    if (note.id === id) {
+      return { ...note, isSaving: true }
+    }
+    return note
+  })
+  client.writeQuery({
+    query: FETCH_ALL_NOTES,
+    data: {
+      allNotes: newNote
+    },
+  });
+}
+const hideSavingNoteIcon = (id: string) => {
+  const noteData = client.readQuery({ query: FETCH_ALL_NOTES });
+  const newNote = noteData.allNotes.map((note: INote) => {
+    if (note.id === id) {
+      return { ...note, isSaving: false }
+    }
+    return note
+  })
+  client.writeQuery({
+    query: FETCH_ALL_NOTES,
+    data: {
+      allNotes: newNote
+    },
+  });
+}
+
+const showErrorIcon = (id: string) => {
+  const noteData = client.readQuery({ query: FETCH_ALL_NOTES });
+  const newNote = noteData.allNotes.map((note: INote) => {
+    if (note.id === id) {
+      return { ...note, isError: true }
+    }
+    return note
+  })
+  client.writeQuery({
+    query: FETCH_ALL_NOTES,
+    data: {
+      allNotes: newNote
+    },
+  });
+}
+
+const hideErrorIcon = (id: string) => {
+  const noteData = client.readQuery({ query: FETCH_ALL_NOTES });
+  const newNote = noteData.allNotes.map((note: INote) => {
+    if (note.id === id) {
+      return { ...note, isError: false }
+    }
+    return note
+  })
+  client.writeQuery({
+    query: FETCH_ALL_NOTES,
+    data: {
+      allNotes: newNote
+    },
+  });
+}
 const deleteNote = (noteId: string) => {
     const filteredNotes = notes.filter((note:INote) => {
         return note.id !== noteId;
       })
       setNotes(filteredNotes)
   }
+  const saveUserNote = async (id: string, color: Theme, contents: string, isSaved: boolean) => {
+
+    try {
+       if (isSaved) {
+        showSavingNoteIcon(id);
+        hideErrorIcon(id);
+        const modifiedNote = await modifyNote({ variables: { data: { color, content: contents }, noteId:id } });
+        console.log(modifiedNote.data);
+        hideSavingNoteIcon(id);
+      }
+      else {
+        showSavingNoteIcon(id);
+        hideErrorIcon(id);
+        const savedNote = await saveNote({ variables: { data: { color, content: contents } } });
+        console.log(savedNote.data);
+        console.log(savedNote.data.newNote.id);
+        hideSavingNoteIcon(id);
+        const noteData = client.readQuery({ query: FETCH_ALL_NOTES });
+        const newNote = noteData.allNotes.map((note: INote) => {
+          if (note.id === id) {
+            return { ...note, isSaved: true, id: savedNote.data.newNote.id, content: savedNote.data.newNote.content }
+          }
+          return note
+        })
+        client.writeQuery({
+          query: FETCH_ALL_NOTES,
+          data: {
+            allNotes: newNote
+          },
+        });
+      } 
+    }
+    catch (error) {
+      console.log(error)
+      hideSavingNoteIcon(id);
+      showErrorIcon(id);
+    }
+  }
+
+
+
   if (loading) {
     return (
       <>
@@ -106,6 +213,10 @@ const deleteNote = (noteId: string) => {
               isMaximized={note.isMaximized}
               deleteNote={deleteNote}
               contents={note.content}
+              saveUserNote={saveUserNote}
+              isSaved={note.isSaved}
+              isSaving={note.isSaving}
+              isError={note.isError}
             />
           )
         })
