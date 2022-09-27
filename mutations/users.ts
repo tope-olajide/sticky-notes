@@ -19,12 +19,6 @@ export const SIGNUP_MUTATION = gql`
     }
   }
 `;
-export const IS_LOGGED_IN = gql`
-  query IsUserLoggedIn {
-    isLoggedIn @client
-  }
-`;
-
 export const LOGIN_MUTATION = gql`
   mutation signin($usernameOrEmail: String!, $password: String!) {
     signinUser(data: { usernameOrEmail: $usernameOrEmail, password: $password }) {
@@ -32,3 +26,8 @@ export const LOGIN_MUTATION = gql`
     }
   }
 `;
+export const LOGOUT_MUTATION = gql`
+mutation signoutUser {
+  signoutUser
+}
+`

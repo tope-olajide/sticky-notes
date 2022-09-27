@@ -1,5 +1,4 @@
 import NoteCard from "./NoteCard"
-import { useState } from 'react';
 import MainNavigationBar from './MainNavigationBar';
 import Footer from "./Footer";
 import { FETCH_ALL_NOTES } from "../queries/note";
@@ -29,7 +28,6 @@ interface INote {
 
 const NoteContainer = () => {
     const { loading, error, data } = useQuery(FETCH_ALL_NOTES);
-
     const [saveNote] = useMutation(SAVE_NOTE);
     const [modifyNote] = useMutation(MODIFY_NOTE);
     const [deleteNoteMutation] = useMutation(DELETE_NOTE);
@@ -211,9 +209,6 @@ const deleteNote = async (noteId: string) => {
       showErrorIcon(id);
     }
   }
-
-
-
   if (loading) {
     return (
       <>
@@ -227,9 +222,7 @@ const deleteNote = async (noteId: string) => {
       router.push('/sign-in')
     }
     return (
-      
       <>
-      
         <h1>Error</h1>
       </>
     )
