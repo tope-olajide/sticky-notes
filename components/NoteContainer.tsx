@@ -5,7 +5,7 @@ import Footer from "./Footer";
 import { FETCH_ALL_NOTES } from "../queries/note";
 import { useMutation, useQuery } from "@apollo/client";
 import client from "../client";
-import { MODIFY_NOTE, SAVE_NOTE } from "../mutations/note";
+import { DELETE_NOTE, MODIFY_NOTE, SAVE_NOTE } from "../mutations/note";
 import router from "next/router";
 enum Theme {
     Yellow = "yellow",
@@ -28,11 +28,11 @@ interface INote {
 }
 
 const NoteContainer = () => {
-    const [notes, setNotes] = useState<Array<INote>>([]);
     const { loading, error, data } = useQuery(FETCH_ALL_NOTES);
 
-    const [saveNote,] = useMutation(SAVE_NOTE);
-    const [modifyNote,] = useMutation(MODIFY_NOTE);
+    const [saveNote] = useMutation(SAVE_NOTE);
+    const [modifyNote] = useMutation(MODIFY_NOTE);
+    const [deleteNoteMutation] = useMutation(DELETE_NOTE);
     const createNote = (currentNoteId: string) => {
       const noteData = client.readQuery({ query: FETCH_ALL_NOTES });
       const noteCopy = [...noteData.allNotes];
@@ -156,11 +156,18 @@ const hideErrorIcon = (id: string) => {
     },
   });
 }
-const deleteNote = (noteId: string) => {
-    const filteredNotes = notes.filter((note:INote) => {
+const deleteNote = async (noteId: string) => {
+  const noteData = client.readQuery({ query: FETCH_ALL_NOTES });
+    const filteredNotes = noteData.allNotes.filter((note:INote) => {
         return note.id !== noteId;
       })
-      setNotes(filteredNotes)
+      client.writeQuery({
+        query: FETCH_ALL_NOTES,
+        data: {
+          allNotes: filteredNotes
+        },
+      });
+       await deleteNoteMutation({ variables: { noteId }});
   }
   const saveUserNote = async (id: string, color: Theme, contents: string, isSaved: boolean) => {
 
@@ -195,8 +202,10 @@ const deleteNote = (noteId: string) => {
       } 
     }
     catch (error:any) {
+      console.log(error)
       if(error.message === "You are not authenticated"){
-        router.push('/sign-in')
+        router.push('/sign-in');
+        localStorage.setItem("isLoggedIn", 'false');
       }
       hideSavingNoteIcon(id);
       showErrorIcon(id);
@@ -214,6 +223,7 @@ const deleteNote = (noteId: string) => {
   }
   if (error) {
     if(error.message === "You are not authenticated"){
+      localStorage.setItem("isLoggedIn", 'false');
       router.push('/sign-in')
     }
     return (
