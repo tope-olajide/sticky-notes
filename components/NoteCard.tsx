@@ -26,8 +26,6 @@ interface IProps {
     isError: boolean;
 }
 
-
-
 const NoteCard: React.FC<IProps> = (props) => {
     const [noteContents, setNoteContents] = useState('');
 const changeNoteColor = (id:string, color:Theme) => {

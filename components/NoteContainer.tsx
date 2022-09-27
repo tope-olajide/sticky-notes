@@ -6,6 +6,7 @@ import { useMutation, useQuery } from "@apollo/client";
 import client from "../client";
 import { DELETE_NOTE, MODIFY_NOTE, SAVE_NOTE } from "../mutations/note";
 import router from "next/router";
+import Loading from "./Loading";
 enum Theme {
     Yellow = "yellow",
     Green = "green",
@@ -31,10 +32,10 @@ const NoteContainer = () => {
     const [saveNote] = useMutation(SAVE_NOTE);
     const [modifyNote] = useMutation(MODIFY_NOTE);
     const [deleteNoteMutation] = useMutation(DELETE_NOTE);
-    const createNote = (currentNoteId: string) => {
+    const createNote = (currentNoteId:string) => {
       const noteData = client.readQuery({ query: FETCH_ALL_NOTES });
       const noteCopy = [...noteData.allNotes];
-      const currentNoteIndex: number = noteCopy.findIndex((note:INote) => note.id === currentNoteId) || 0;
+      const currentNoteIndex: number = noteCopy.findIndex((note:INote) => note.id === currentNoteId);
       const emptyNote =  {
         content: "",
         color: Theme.Yellow,
@@ -212,7 +213,7 @@ const deleteNote = async (noteId: string) => {
   if (loading) {
     return (
       <>
-        <h1>Loading...</h1>
+        <Loading />
       </>
     )
   }
@@ -228,7 +229,7 @@ const deleteNote = async (noteId: string) => {
     )
   }
 
-  return (<>
+   return (<>
   {console.log(data.allNotes)}
     <section className='main-container'>
       <MainNavigationBar />
@@ -254,7 +255,7 @@ const deleteNote = async (noteId: string) => {
         })
           : <>
             <section className="no-notes-container">
-              <h3>You have no notes</h3><button onClick={()=>createNote}> Create New </button>
+              <h3>You have no notes</h3><button onClick={()=>createNote('0')}> Create New </button>
             </section>
           </>
         }
@@ -262,6 +263,6 @@ const deleteNote = async (noteId: string) => {
       <Footer />
     </section>
   </>
-  )
+  ) 
 }
 export default NoteContainer
