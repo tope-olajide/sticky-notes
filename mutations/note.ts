@@ -19,7 +19,6 @@ mutation modifyNote ($data: NoteData!, $noteId: String!) {
     }
 }
 `
-
 export const DELETE_NOTE = gql `
 mutation deleteNote ($noteId: ID!) {
     deleteNote (noteId: $noteId) {
