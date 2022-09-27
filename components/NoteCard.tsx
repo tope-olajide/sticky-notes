@@ -26,16 +26,23 @@ interface IProps {
     isError: boolean;
 }
 
+
+
 const NoteCard: React.FC<IProps> = (props) => {
-    const [timer, setTimer] = useState<NodeJS.Timeout>()
     const [noteContents, setNoteContents] = useState('');
+const changeNoteColor = (id:string, color:Theme) => {
+    props.changeColor(id, color);
+    props.saveUserNote(id, color, noteContents||props.contents, props.isSaved)
+}
+
+    let timer:NodeJS.Timeout;
     const handleContentChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
         clearTimeout(timer)
         const newTimer: NodeJS.Timeout = setTimeout(() => {
             setNoteContents(event.target.value)
             props.saveUserNote(props.id, props.color, event.target.value, props.isSaved)
         }, 2000)
-        setTimer(newTimer)
+        timer = newTimer;
     }
     return (
         <>
@@ -47,7 +54,7 @@ const NoteCard: React.FC<IProps> = (props) => {
                             <div className="icon" >{props.isSaving ? <FontAwesomeIcon icon={faSpinner} spin />:props.isError ? <FontAwesomeIcon icon={faExclamationTriangle} />:props.isSaved ? <FontAwesomeIcon icon={faCheck} /> : null}</div>
                         </div>
                         <div className="right-icon">
-                            <div className="icon" onClick={()=>props.saveUserNote(props.id, props.color, noteContents, props.isSaved)}><FontAwesomeIcon icon={faSave} /></div>
+                            <div className="icon" onClick={()=>props.saveUserNote(props.id, props.color, noteContents||props.contents, props.isSaved)}><FontAwesomeIcon icon={faSave} /></div>
                             <div className="icon" onClick={() => props.toggleFullscreen(props.id)}><FontAwesomeIcon icon={faWindowMaximize} /></div>
                             <div className="icon" onClick={() => props.deleteNote(props.id)} ><FontAwesomeIcon icon={faTrash} /></div>
                         </div>
@@ -60,13 +67,13 @@ const NoteCard: React.FC<IProps> = (props) => {
                 </div>
                 <div className="card-footer">
                     <div className="theme-color-container">
-                        <div className="theme-color yellow" onClick={() => props.changeColor(props.id, Theme.Yellow)} > </div>
-                        <div className="theme-color green" onClick={() => props.changeColor(props.id, Theme.Green)}></div>
-                        <div className="theme-color pink" onClick={() => props.changeColor(props.id, Theme.Pink)}></div>
-                        <div className="theme-color purple" onClick={() => props.changeColor(props.id, Theme.Purple)}></div>
-                        <div className="theme-color blue" onClick={() => props.changeColor(props.id, Theme.Blue)}></div>
-                        <div className="theme-color gray" onClick={() => props.changeColor(props.id, Theme.Gray)}></div>
-                        <div className="theme-color charcoal" onClick={() => props.changeColor(props.id, Theme.Charcoal)}></div>
+                        <div className="theme-color yellow" onClick={() => changeNoteColor(props.id, Theme.Yellow)} > </div>
+                        <div className="theme-color green" onClick={() =>changeNoteColor(props.id, Theme.Green)}></div>
+                        <div className="theme-color pink" onClick={() => changeNoteColor(props.id, Theme.Pink)}></div>
+                        <div className="theme-color purple" onClick={() => changeNoteColor(props.id, Theme.Purple)}></div>
+                        <div className="theme-color blue" onClick={() => changeNoteColor(props.id, Theme.Blue)}></div>
+                        <div className="theme-color gray" onClick={() => changeNoteColor(props.id, Theme.Gray)}></div>
+                        <div className="theme-color charcoal" onClick={() => changeNoteColor(props.id, Theme.Charcoal)}></div>
                     </div>
                 </div>
             </div>
