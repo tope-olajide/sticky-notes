@@ -6,6 +6,7 @@ import { FETCH_ALL_NOTES } from "../queries/note";
 import { useMutation, useQuery } from "@apollo/client";
 import client from "../client";
 import { MODIFY_NOTE, SAVE_NOTE } from "../mutations/note";
+import router from "next/router";
 enum Theme {
     Yellow = "yellow",
     Green = "green",
@@ -55,17 +56,25 @@ const NoteContainer = () => {
     console.log(noteCopy)
     }
 
-    const changeColor = (noteId: string, color: Theme) => {
-        const updatedNotes = notes.map((note:INote) => {
-          if (note.id === noteId) {
-            return {
-              ...note, color: color
-            }
+    const changeColor = (id: string, color: Theme) => {
+      const noteData = client.readQuery({ query: FETCH_ALL_NOTES });
+      const updatedNotes = noteData.allNotes.map((note: INote) => {
+        if (note.id === id) {
+          return {
+            ...note, color: color
           }
-          return note
-        })
-        setNotes(updatedNotes)
-      }
+        }
+        return note
+      })
+  
+      client.writeQuery({
+        query: FETCH_ALL_NOTES,
+        data: {
+          allNotes: updatedNotes
+        },
+      });
+
+    }
       
 const toggleFullscreen = (noteId:string) => {
     const updatedNotes = notes.map((note:INote) => {
@@ -182,8 +191,10 @@ const deleteNote = (noteId: string) => {
         });
       } 
     }
-    catch (error) {
-      console.log(error)
+    catch (error:any) {
+      if(error.message === "You are not authenticated"){
+        router.push('/sign-in')
+      }
       hideSavingNoteIcon(id);
       showErrorIcon(id);
     }
@@ -199,8 +210,13 @@ const deleteNote = (noteId: string) => {
     )
   }
   if (error) {
+    if(error.message === "You are not authenticated"){
+      router.push('/sign-in')
+    }
     return (
+      
       <>
+      
         <h1>Error</h1>
       </>
     )
