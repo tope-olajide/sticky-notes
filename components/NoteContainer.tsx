@@ -255,7 +255,7 @@ const deleteNote = async (noteId: string) => {
         })
           : <>
             <section className="no-notes-container">
-              <h3>You have no notes</h3><button onClick={()=>createNote(0)}> Create New </button>
+              <h3>You have no notes</h3><button onClick={()=>createNote('0')}> Create New </button>
             </section>
           </>
         }
