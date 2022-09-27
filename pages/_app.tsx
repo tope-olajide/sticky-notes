@@ -4,6 +4,7 @@ import { ApolloProvider } from '@apollo/client'
 import client from '../client'
 import "react-toastify/dist/ReactToastify.css";
 import { useEffect, useState } from 'react';
+import Loading from '../components/Loading';
 function MyApp({ Component, pageProps }: AppProps) {
   const [isClient, setIsClient] = useState(false)
   useEffect(() => {
@@ -18,6 +19,10 @@ function MyApp({ Component, pageProps }: AppProps) {
       </ApolloProvider>
     )
   }
-
+return(
+  <>
+  <Loading />
+  </>
+)
 }
 export default MyApp
