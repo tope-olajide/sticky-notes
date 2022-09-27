@@ -76,20 +76,23 @@ const NoteContainer = () => {
 
     }
       
-const toggleFullscreen = (noteId:string) => {
-    const updatedNotes = notes.map((note:INote) => {
-        if (note.id === noteId) {
-            if (note.isMaximized === false) {
-               return {...note, isMaximized: true}
-              }
-              else {
-                return {...note, isMaximized: false}
-              }
-            }
+    const toggleFullscreen = (id: string) => {
+      const noteData = client.readQuery({ query: FETCH_ALL_NOTES });
+      console.log(noteData)
+      const newNote = noteData.allNotes.map((note: INote) => {
+        if (note.id === id) {
+          return { ...note, isMaximized: !note.isMaximized }
+        }
         return note
       })
-      setNotes(updatedNotes)
-}
+      console.log(newNote);
+      client.writeQuery({
+        query: FETCH_ALL_NOTES,
+        data: {
+          allNotes: newNote
+        },
+      });
+    }
 
 const showSavingNoteIcon = (id: string) => {
   const noteData = client.readQuery({ query: FETCH_ALL_NOTES });
