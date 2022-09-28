@@ -27,7 +27,7 @@ interface IProps {
 }
 
 const NoteCard: React.FC<IProps> = (props) => {
-    const [noteContents, setNoteContents] = useState('');
+const [noteContents, setNoteContents] = useState('');
 const changeNoteColor = (id:string, color:Theme) => {
     props.changeColor(id, color);
     props.saveUserNote(id, color, noteContents||props.contents, props.isSaved)
