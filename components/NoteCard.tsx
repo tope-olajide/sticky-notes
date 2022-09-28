@@ -18,7 +18,7 @@ interface IProps {
     color: Theme;
     toggleFullscreen(noteId: string): void;
     isMaximized: boolean;
-    deleteNote(noteId: string): void;
+    deleteNote(noteId: string, isSaved:boolean): void;
     contents: string;
     saveUserNote(id: string, color: Theme, contents: string, isSaved: boolean): Promise<void>;
     isSaved: boolean;
@@ -54,7 +54,7 @@ const changeNoteColor = (id:string, color:Theme) => {
                         <div className="right-icon">
                             <div className="icon" onClick={()=>props.saveUserNote(props.id, props.color, noteContents||props.contents, props.isSaved)}><FontAwesomeIcon icon={faSave} /></div>
                             <div className="icon" onClick={() => props.toggleFullscreen(props.id)}><FontAwesomeIcon icon={faWindowMaximize} /></div>
-                            <div className="icon" onClick={() => props.deleteNote(props.id)} ><FontAwesomeIcon icon={faTrash} /></div>
+                            <div className="icon" onClick={() => props.deleteNote(props.id, props.isSaved)} ><FontAwesomeIcon icon={faTrash} /></div>
                         </div>
                     </div>
                 </div>

@@ -13,7 +13,6 @@ const router = useRouter();
   const [userInputs, setUserInputs] = useState({})
   useEffect(() => {
      if (data) {
-      console.log(data);
        setTimeout(() => router.push('/'), 3000);
        localStorage.setItem("isLoggedIn", 'true');
       toast.success("Registration Successful!", {
@@ -25,12 +24,10 @@ const router = useRouter();
         position: "bottom-center",
         autoClose: false
       });
-      console.log(error)
     }
  },[data, error, router]);
   const saveUserInputs = (event: ChangeEvent<HTMLInputElement>) => {
-    setUserInputs({ ...userInputs, [event.target.name]: event.target.value })
-    console.log(userInputs)
+    setUserInputs({ ...userInputs, [event.target.name]: event.target.value });
   }
 
   const handleFormSubmit = async (event: FormEvent) => {

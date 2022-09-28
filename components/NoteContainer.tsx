@@ -7,6 +7,7 @@ import client from "../client";
 import { DELETE_NOTE, MODIFY_NOTE, SAVE_NOTE } from "../mutations/note";
 import router from "next/router";
 import Loading from "./Loading";
+import ErrorPage from "./ErrorPage";
 enum Theme {
     Yellow = "yellow",
     Green = "green",
@@ -72,7 +73,6 @@ const NoteContainer = () => {
           allNotes: updatedNotes
         },
       });
-
     }
       
     const toggleFullscreen = (id: string) => {
@@ -155,7 +155,7 @@ const hideErrorIcon = (id: string) => {
     },
   });
 }
-const deleteNote = async (noteId: string) => {
+const deleteNote = async (noteId: string, isSaved:boolean) => {
   const noteData = client.readQuery({ query: FETCH_ALL_NOTES });
     const filteredNotes = noteData.allNotes.filter((note:INote) => {
         return note.id !== noteId;
@@ -166,7 +166,10 @@ const deleteNote = async (noteId: string) => {
           allNotes: filteredNotes
         },
       });
-       await deleteNoteMutation({ variables: { noteId }});
+      if(isSaved){
+        await deleteNoteMutation({ variables: { noteId }});
+      }
+       
   }
   const saveUserNote = async (id: string, color: Theme, contents: string, isSaved: boolean) => {
 
@@ -224,7 +227,11 @@ const deleteNote = async (noteId: string) => {
     }
     return (
       <>
-        <h1>Error</h1>
+         <section className='main-container'>
+      <MainNavigationBar />
+        <ErrorPage />
+        <Footer />
+        </section>
       </>
     )
   }
