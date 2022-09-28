@@ -2,7 +2,6 @@
 import { LOGOUT_MUTATION } from "../mutations/users";
 import { useMutation } from "@apollo/client";
 import router from 'next/router';
-import { toast, ToastContainer } from 'react-toastify';
 import client from "../client";
 
 const MainNavigationBar = () => {
@@ -10,23 +9,16 @@ const MainNavigationBar = () => {
 
     const logout = async () => {
         localStorage.setItem("isLoggedIn", 'false');
-        try {
-            await signout();
-            router.push('/sign-in')
             client.clearStore();
             client.cache.gc();
-        }
-        catch {
-            toast.error('Unable to logout.', {
-                position: "bottom-center",
-                autoClose: false
-            });
-        }
+            router.push('/sign-in');
+            signout();
     }
     return (
         <>
-            <ToastContainer />
+           
             <div className="auth-navbar">
+            
                 <h1>Sticky Note</h1>
                 <div className="menu">
                     <button onClick={logout} className="logout-button">Logout</button>

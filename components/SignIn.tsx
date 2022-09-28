@@ -17,12 +17,10 @@ const SignIn = () => {
         position: "bottom-center",
         autoClose: false
       });
-      console.log(error)
     }
     if (data) {
       localStorage.setItem("isLoggedIn", 'true');
-      console.log(data);
-        router.push('/'), 3000
+      setTimeout(() => router.push('/'), 3000);
       toast.success("Welcome back!", {
         position: "bottom-center"
       });
@@ -30,12 +28,10 @@ const SignIn = () => {
   }, [data, error]);
   const saveUserInputs = (event: ChangeEvent<HTMLInputElement>) => {
     setUserInputs({ ...userInputs, [event.target.name]: event.target.value })
-    console.log(userInputs);
   }
 
   const handleFormSubmit = async (event: FormEvent) => {
     event.preventDefault()
-    console.log(userInputs)
     await login({
       variables: userInputs
     });
