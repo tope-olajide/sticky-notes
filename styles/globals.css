@@ -16,7 +16,7 @@ body {
   flex-direction: column;
   justify-content: space-between;
 }
-.card{
+.card, .delete-note-modal{
   width: 300px;
   height: 350px;
   background-color: #f9e675;
@@ -24,6 +24,21 @@ body {
   border: 1px solid rgb(0, 0, 0,.5);
   margin: 1rem;
 }
+.delete-note-modal {
+  text-align: center;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  }
+  .delete-note-modal h3 {
+    margin: 0 0 1rem 0;
+  }
+  
+  .delete-note-modal button {
+    width: 90%;
+    background-color: rgb(31, 15, 15);
+  }
 .card-maximized {
   width: 100%;
   height: 100%;
@@ -143,7 +158,7 @@ align-items: flex-start;
   display: flex;
   flex-direction: column;
   width: 350px;
-  margin: 0rem auto;
+  margin: 3rem auto;
   align-items: center;
   border: 1px solid rgba(0, 0, 0, 0.2);
   padding: 3rem 1rem;
@@ -151,9 +166,10 @@ align-items: flex-start;
   background-color: #f9e675;
   color: black;
   border-radius: 5px;
+  text-align: center;
 }
 .no-notes-container button, .error-page-container button {
- background-color: #77797e;
+ background-color: #000000;
  border-radius: 5px;
 }
 .auth-container{

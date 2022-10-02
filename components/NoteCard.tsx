@@ -1,33 +1,11 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlus, faWindowMaximize, faTrash, faSave, faExclamationTriangle, faSpinner, faCheck } from '@fortawesome/free-solid-svg-icons'
 import { ChangeEvent, useState } from 'react';
-enum Theme {
-    Yellow = "yellow",
-    Green = "green",
-    Pink = "pink",
-    Purple = "purple",
-    Blue = "blue",
-    Gray = "gray",
-    Charcoal = "charcoal"
-}
+import { INoteCardProps, Theme } from '../typings';
 
-interface IProps {
-    createNote(noteId: string): void;
-    changeColor(noteId: string, color: string): void;
-    id: string;
-    color: Theme;
-    toggleFullscreen(noteId: string): void;
-    isMaximized: boolean;
-    deleteNote(noteId: string, isSaved:boolean): void;
-    contents: string;
-    saveUserNote(id: string, color: Theme, contents: string, isSaved: boolean): Promise<void>;
-    isSaved: boolean;
-    isSaving: boolean;
-    isError: boolean;
-}
-
-const NoteCard: React.FC<IProps> = (props) => {
+const NoteCard: React.FC<INoteCardProps> = (props) => {
 const [noteContents, setNoteContents] = useState('');
+
 const changeNoteColor = (id:string, color:Theme) => {
     props.changeColor(id, color);
     props.saveUserNote(id, color, noteContents||props.contents, props.isSaved)
@@ -42,6 +20,18 @@ const changeNoteColor = (id:string, color:Theme) => {
         }, 2000)
         timer = newTimer;
     }
+
+    if (props.isDeleteNoteModalVisible) {
+        return (
+            <section className="delete-note-modal" id={props.color}>
+                <h3>This note will be permanently deleted, continue?</h3>
+                <div>
+                    <button onClick={() => props.deleteNote(props.id, props.isSaved)}> Yes </button>
+                    <button onClick={() => props.toggleDeleteNoteModal(props.id)}> No</button>
+                </div>
+            </section>
+        )
+    }
     return (
         <>
             <div className={props.isMaximized ? "card-maximized" : "card"} id={props.color}>
@@ -54,7 +44,7 @@ const changeNoteColor = (id:string, color:Theme) => {
                         <div className="right-icon">
                             <div className="icon" onClick={()=>props.saveUserNote(props.id, props.color, noteContents||props.contents, props.isSaved)}><FontAwesomeIcon icon={faSave} /></div>
                             <div className="icon" onClick={() => props.toggleFullscreen(props.id)}><FontAwesomeIcon icon={faWindowMaximize} /></div>
-                            <div className="icon" onClick={() => props.deleteNote(props.id, props.isSaved)} ><FontAwesomeIcon icon={faTrash} /></div>
+                            <div className="icon" onClick={() => props.toggleDeleteNoteModal(props.id)} ><FontAwesomeIcon icon={faTrash} /></div>
                         </div>
                     </div>
                 </div>
