@@ -38,13 +38,13 @@ const changeNoteColor = (id:string, color:Theme) => {
                 <div className="card-header">
                     <div className="icon-container">
                         <div className="left-icon">
-                            <div className="icon" onClick={() => props.createNote(props.id)}><FontAwesomeIcon icon={faPlus} /></div>
+                            <div className="icon" onClick={() => props.createNote(props.id)}>{props.isMaximized ?null:<FontAwesomeIcon icon={faPlus} />}</div>
                             <div className="icon" >{props.isSaving ? <FontAwesomeIcon icon={faSpinner} spin />:props.isError ? <FontAwesomeIcon icon={faExclamationTriangle} />:props.isSaved ? <FontAwesomeIcon icon={faCheck} /> : null}</div>
                         </div>
                         <div className="right-icon">
+                            <div className="icon" onClick={() => props.toggleDeleteNoteModal(props.id)} >{props.isMaximized ?null:<FontAwesomeIcon icon={faTrash} /> }</div>
                             <div className="icon" onClick={()=>props.saveUserNote(props.id, props.color, noteContents||props.contents, props.isSaved)}><FontAwesomeIcon icon={faSave} /></div>
                             <div className="icon" onClick={() => props.toggleFullscreen(props.id)}><FontAwesomeIcon icon={faWindowMaximize} /></div>
-                            <div className="icon" onClick={() => props.toggleDeleteNoteModal(props.id)} ><FontAwesomeIcon icon={faTrash} /></div>
                         </div>
                     </div>
                 </div>
