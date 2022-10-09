@@ -216,6 +216,7 @@ const deleteNote = async (noteId: string, isSaved:boolean) => {
   }
   if (error) {
     if(error.message === "You are not authenticated"){
+      console.log(error.name)
       localStorage.setItem("isLoggedIn", 'false');
       router.push('/sign-in')
     }

@@ -23,7 +23,12 @@ export const cache: InMemoryCache = new InMemoryCache({
              read(isError = false) {
                return isError ;
              }
-           } 
+           },
+           isSaved:{
+            read(isSaved = true) {
+              return isSaved ;
+            }
+          } 
          }
        }
      }
