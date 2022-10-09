@@ -20,7 +20,7 @@ mutation modifyNote ($data: NoteData!, $noteId: String!) {
 }
 `
 export const DELETE_NOTE = gql `
-mutation deleteNote ($noteId: ID!) {
+mutation deleteNote ($noteId: String!) {
     deleteNote (noteId: $noteId) {
         color
         content
