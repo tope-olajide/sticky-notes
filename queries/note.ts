@@ -6,7 +6,7 @@ query allNotes {
         color
         content
         id
-        isSaved
+        isSaved @client
         isMaximized @client
         isSaving @client
         isError @client
