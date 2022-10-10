@@ -45,8 +45,8 @@ const SignIn = () => {
         <div className="auth-container">
           <form className="auth-form">
             <h3>Sign In</h3>
-            <input type='text' name="usernameOrEmail" placeholder="Username or Email" onChange={(event) => saveUserInputs(event)} />
-            <input type='password' name="password" placeholder="Password" onChange={(e) => saveUserInputs(e)} />
+            <input type='text' name="usernameOrEmail" placeholder="Username or Email" onChange={(event) => saveUserInputs(event)} required />
+            <input type='password' name="password" placeholder="Password" onChange={(e) => saveUserInputs(e)} required />
             <button disabled={loading} onClick={(event) => handleFormSubmit(event)}>  {loading ? <FontAwesomeIcon icon={faSpinner} spin size="1x" /> : "Login"}</button>
           </form>
         </div>
