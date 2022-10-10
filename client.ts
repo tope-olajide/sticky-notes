@@ -7,7 +7,6 @@ const link = createHttpLink({
     uri: 'https://sticky-note.onrender.com/graphql',
     credentials: 'include'
 });
-
 const client = new ApolloClient({
     cache,
     link,
