@@ -45,10 +45,10 @@ const router = useRouter();
         <div className="auth-container">
           <form className="auth-form">
             <h3>Create Acount</h3>
-            <input type='text' name="fullname" placeholder="fullname" onChange={(event) => saveUserInputs(event)} />
-            <input type='text' name="username" placeholder="username" onChange={(event) => saveUserInputs(event)} />
-            <input type='email' name="email" placeholder="email" onChange={(event) => saveUserInputs(event)} />
-            <input type='password' name="password" placeholder="password" onChange={(event) => saveUserInputs(event)} />
+            <input type='text' name="fullname" placeholder="fullname" onChange={(event) => saveUserInputs(event)} minLength={4} />
+            <input type='text' name="username" placeholder="username" onChange={(event) => saveUserInputs(event)} minLength={3} />
+            <input type='email' name="email" placeholder="email" onChange={(event) => saveUserInputs(event)} required />
+            <input type='password' name="password" placeholder="password" onChange={(event) => saveUserInputs(event)} minLength={5} />
             <button  disabled={loading}  onClick={(event) => handleFormSubmit(event)}>{loading?<FontAwesomeIcon  icon={faSpinner} spin size="1x"/>:"Create Account"}</button>
           </form>
         </div>
