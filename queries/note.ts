@@ -10,7 +10,7 @@ query allNotes {
         isMaximized @client
         isSaving @client
         isError @client
-        isDeleteNoteModalVisible @client
+        isDeleteNoteConfirmationVisible @client
     }
 }
 `

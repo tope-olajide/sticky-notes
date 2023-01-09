@@ -9,9 +9,9 @@ export const cache: InMemoryCache = new InMemoryCache({
                return isMaximized ;
              },
            },
-           isDeleteNoteModalVisible:{
-            read(isDeleteNoteModalVisible = false) {
-              return isDeleteNoteModalVisible ;
+           isDeleteNoteConfirmationVisible:{
+            read(isDeleteNoteConfirmationVisible = false) {
+              return isDeleteNoteConfirmationVisible ;
             },
           },
            isSaving:{
